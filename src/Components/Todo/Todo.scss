@@ -1,0 +1,59 @@
+.header {
+    background-color: rgb(77, 88, 96);
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: medium;
+}
+
+
+.formSpace {
+    margin-top: .5rem;
+    border: 2px solid rgba(144, 144, 144, 0.286);
+    border-radius: 10px;
+    
+    .form {
+    font-family: Arial, Helvetica, sans-serif;
+    display: block;
+    width: 13rem;
+    height: 18rem;
+    
+        input {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }  
+        .slider {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            display: block;
+            width: 135%;
+        }
+        Button {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .Tasks {
+            margin-top: .5rem;
+        }
+    }
+}
+.badge-complete {
+    background-color: rgba(1, 187, 1, 0.556);
+    color: white;
+    :hover {
+        cursor: pointer;
+    }
+}
+.badge-pending {
+    background-color: rgba(255, 0, 0, 0.556);
+    color: white;
+    :hover {
+        cursor: pointer;
+    }
+}
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
