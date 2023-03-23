@@ -5,9 +5,11 @@ import { TaskCard } from './Card.jsx'
 import { Grid, Container, Button, Pagination} from '@mantine/core';
 import { v4 as uuid } from 'uuid';
 import "./Todo.scss"
+import { useContext } from 'react';
+import { SettingsContext } from '../settingsContext';
 
 const Todo = () => {
-    
+    const { settings } = useContext(SettingsContext);
     const [defaultValues] = useState({
         difficulty: 1,
     });
@@ -49,15 +51,19 @@ const Todo = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, [list]);  
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 3;
+    const itemsPerPage = settings.itemsPerPage;
 
     const pageCount = Math.ceil(list.length / itemsPerPage);
-    const displayedItems = list.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    const displayedItems = settings.showCompleted
+    ? list.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+    : list
+        .filter((item) => !item.complete)
+        .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
     function sortByDifficulty(a, b) {
         return a.difficulty - b.difficulty;
       }
     
-      const sortedItems = displayedItems.sort(sortByDifficulty);
+    displayedItems.sort(sortByDifficulty);
     
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -65,9 +71,9 @@ const Todo = () => {
     return (
         <>
         <Container my="md">
-            <Grid>
+            <Grid >
                 
-                <Grid.Col xs={10} className="header">{
+                <Grid.Col xs={10} className="compheader">{
                     <header data-testid="todo-header">
                         <h1 data-testid="todo-h1">To Do List: {incomplete} items pending</h1>
                     </header>
@@ -89,7 +95,7 @@ const Todo = () => {
 
                         <label>
                         <span>Difficulty</span>
-                            <SliderBar handleChange={handleChange} defaultValues={defaultValues.difficulty}/>
+                            <SliderBar className='slider' handleChange={handleChange} defaultValues={defaultValues.difficulty}/>
                         </label>
 
                         <label>
@@ -109,15 +115,10 @@ const Todo = () => {
                             toggleComplete={toggleComplete} 
                             itemText={item.text}
                             className='Tasks'
-                        />
-                        
-                        
-                        
+                        />   
                     ))}
-                </Grid.Col>
-                
-            </Grid>
-            
+                </Grid.Col> 
+            </Grid>   
         </Container>
         <div className='pagination-wrapper'>
             <Pagination
@@ -128,12 +129,6 @@ const Todo = () => {
                 size="md"
             />
         </div>
-        
-
-        
-
-        
-
         </>
     );
 };
