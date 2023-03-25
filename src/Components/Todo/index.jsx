@@ -7,7 +7,8 @@ import { v4 as uuid } from 'uuid';
 import "./Todo.scss"
 import { useContext } from 'react';
 import { SettingsContext } from '../settingsContext';
-
+import Auth from '../Login/Auth.jsx';
+import LoginContext from '../Login/Context.jsx'
 const Todo = () => {
     const { settings } = useContext(SettingsContext);
     const [defaultValues] = useState({
@@ -69,11 +70,11 @@ const Todo = () => {
         setCurrentPage(page);
     };
     return (
-        <>
+        <LoginContext>
         <Container my="md">
             <Grid >
                 
-                <Grid.Col xs={10} className="compheader">{
+            <Auth capability="create"><Grid.Col xs={10} className="compheader">{
                     <header data-testid="todo-header">
                         <h1 data-testid="todo-h1">To Do List: {incomplete} items pending</h1>
                     </header>
@@ -102,7 +103,7 @@ const Todo = () => {
                         <Button type="submit">Add Item</Button>
                         </label>
                     </form>
-                </Grid.Col>
+                </Grid.Col></Auth>
                 <Grid.Col xs={6}>
                     {displayedItems.map(item => (
                         <TaskCard 
@@ -129,7 +130,7 @@ const Todo = () => {
                 size="md"
             />
         </div>
-        </>
+        </LoginContext>
     );
 };
 

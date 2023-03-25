@@ -1,7 +1,8 @@
 import { Card, Text, Badge, Group } from '@mantine/core';
 import { FaRegTimesCircle } from 'react-icons/fa'
 import React, {useState} from 'react';
-
+import Auth from '../Login/Auth.jsx';
+import LoginContext from '../Login/Context.jsx'
 export function TaskCard({id, deleteItem, itemAssignee, itemComplete, toggleComplete, itemText, itemDifficulty}) {
   const [complete, setComplete] = useState(itemComplete ? 'Pending' : 'Complete');
 
@@ -11,11 +12,13 @@ export function TaskCard({id, deleteItem, itemAssignee, itemComplete, toggleComp
   };
 
   return (
-    <Card withBorder padding="md" radius="md">
+    <LoginContext>
+      <Auth>
+      <Card withBorder padding="md" radius="md">
       <Group position="apart">
-        <Badge onClick={handleClick} className={`badge ${complete === 'Complete' ? 'badge-complete' : 'badge-pending'}`}>{complete}</Badge> 
+      <Auth capability="update"><Badge onClick={handleClick} className={`badge ${complete === 'Complete' ? 'badge-complete' : 'badge-pending'}`}>{complete}</Badge></Auth>
         <Text fz="lg" fw={500}>{itemAssignee}</Text>
-        <p className="delete" onClick={() => deleteItem(id)}><FaRegTimesCircle /></p>
+        <Auth capability="delete"><p className="delete" onClick={() => deleteItem(id)}><FaRegTimesCircle /></p></Auth>
       </Group>
 
       <Text fz="lg" fw={500} mt={5}>
@@ -27,5 +30,9 @@ export function TaskCard({id, deleteItem, itemAssignee, itemComplete, toggleComp
         <p><small>Difficulty: {itemDifficulty}</small></p>
       </Group>
     </Card>
+      </Auth>
+      
+  </LoginContext>
+    
   );
 }
