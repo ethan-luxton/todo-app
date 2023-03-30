@@ -9,7 +9,22 @@ import { useContext } from 'react';
 import { SettingsContext } from '../settingsContext';
 import Auth from '../Login/Auth.jsx';
 import LoginContext from '../Login/Context.jsx'
+import axios from 'axios';
+
 const Todo = () => {
+    
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/todo`);
+            
+            setList(response.data.results);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    
+
     const { settings } = useContext(SettingsContext);
     const [defaultValues] = useState({
         difficulty: 1,
@@ -18,35 +33,50 @@ const Todo = () => {
     const [incomplete, setIncomplete] = useState([]);
     const { handleChange, handleSubmit } = useForm(addItem, defaultValues);
 
-    function addItem(item) {
+    async function addItem(item) {
         item.id = uuid();
         item.complete = false;
-        console.log(item);
-        setList([...list, item]);
-    }
-
-    function deleteItem(id) {
-        const items = list.filter( item => item.id !== id );
-        setList(items);
-    }
-
-    function toggleComplete(id) {
-
-        const items = list.map( item => {
-        if ( item.id === id ) {
-            item.complete = ! item.complete;
+   
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API}/api/v1/todo`, item);
+            setList([...list, response.data]);
+        } catch (error) {
+            console.error('Error adding item:', error);
         }
-        return item;
-        });
-
-        setList(items);
-
     }
 
+    async function deleteItem(id) {
+        try {
+            await axios.delete(`${process.env.REACT_APP_API}/api/v1/todo/${id}`);
+            
+            fetchData()
+        } catch (error) {
+            console.error('Error deleting item:', error);
+        }
+    }
+
+    async function toggleComplete(id) {
+        console.log(id)
+        const itemToUpdate = list.find(item => item.id === id);
+        if (!itemToUpdate) return;
+    
+        const updatedItem = { ...itemToUpdate, complete: !itemToUpdate.complete };
+    
+        try {
+            await axios.put(`${process.env.REACT_APP_API}/api/v1/todo/${id}`, updatedItem);
+            const items = list.map(item => item.id === id ? updatedItem : item);
+            setList(items);
+        } catch (error) {
+            console.error('Error updating item:', error);
+        } 
+
+    }
+    
     useEffect(() => {
         let incompleteCount = list.filter(item => !item.complete).length;
         setIncomplete(incompleteCount);
         document.title = `To Do List: ${incomplete}`;
+        fetchData();
         // linter will want 'incomplete' added to dependency array unnecessarily. 
         // disable code used to avoid linter warning 
         // eslint-disable-next-line react-hooks/exhaustive-deps 
@@ -108,16 +138,18 @@ const Todo = () => {
                     {displayedItems.map(item => (
                         <TaskCard 
                             deleteItem={deleteItem} 
-                            key={item.id} 
-                            id={item.id} 
+                            key={item._id} 
+                            id={item._id} 
                             itemComplete={item.complete.toString()} 
                             itemAssignee={item.assignee} 
                             itemDifficulty={item.difficulty}
                             toggleComplete={toggleComplete} 
                             itemText={item.text}
                             className='Tasks'
-                        />   
-                    ))}
+                        />  
+                         
+                    ))
+                    }
                 </Grid.Col> 
             </Grid>   
         </Container>
