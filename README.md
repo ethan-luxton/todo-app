@@ -1,3 +1,35 @@
+# Todo-App - Lab - Class 34
+
+### Authors: Ethan Luxton
+
+## Project:  Integrating with a live API.
+
+### Problem Domain
+
+In Phase 4, we will finalize the functionality of the application by connecting to live servers for login, authorization, and data access.
+
+1. Alter the Add, Toggle Complete, and Delete functions within your to do application to use your API instead of in memory state.
+    * Fetch the current list of items from the database on application start.
+    * Whenever you add/update/delete an item, refresh the state so the user can instantly see the change.
+
+2. Alter the Login Context to use the server to login users instead of our mock users list.
+    * Be sure to store the token in state as well as in a cookie so you can reference it later.
+
+#### Features
+
+-   Feature One: CRUD methods for tasks via API
+-   Feature Two: Login and logout functions via API
+-   Feature Three: Testing
+-   Feature Four: Deploy to Dev
+-   Feature Five: Deploy to main
+-   Deployed to Netlify.com
+
+## UML
+
+![uml](https://i.imgur.com/ms2LzJk.png)
+
+--------------------------------------------------------------------
+
 # Todo-App - Lab - Class 33
 
 ### Authors: Ethan Luxton

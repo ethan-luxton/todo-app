@@ -4,11 +4,13 @@ import React, {useState} from 'react';
 import Auth from '../Login/Auth.jsx';
 import LoginContext from '../Login/Context.jsx'
 export function TaskCard({id, deleteItem, itemAssignee, itemComplete, toggleComplete, itemText, itemDifficulty}) {
-  const [complete, setComplete] = useState(itemComplete ? 'Pending' : 'Complete');
+  const [complete, setComplete] = useState(itemComplete === 'true');
+  
 
   const handleClick = () => {
+    
     toggleComplete(id);
-    setComplete(prevState => prevState === 'Complete' ? 'Pending' : 'Complete');
+    setComplete(!complete);
   };
 
   return (
@@ -16,7 +18,7 @@ export function TaskCard({id, deleteItem, itemAssignee, itemComplete, toggleComp
       <Auth>
       <Card withBorder padding="md" radius="md">
       <Group position="apart">
-      <Auth capability="update"><Badge onClick={handleClick} className={`badge ${complete === 'Complete' ? 'badge-complete' : 'badge-pending'}`}>{complete}</Badge></Auth>
+      <Auth capability="update"><Badge onClick={handleClick} className={`badge ${complete ? 'badge-complete' : 'badge-pending'}`}>{complete ? 'Complete' : 'Pending'}</Badge></Auth>
         <Text fz="lg" fw={500}>{itemAssignee}</Text>
         <Auth capability="delete"><p className="delete" onClick={() => deleteItem(id)}><FaRegTimesCircle /></p></Auth>
       </Group>
